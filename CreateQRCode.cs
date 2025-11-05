@@ -43,12 +43,13 @@ namespace QRCodeFunction
 
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
-                QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-                Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-                var imgType = Base64QRCode.ImageType.Jpeg;
-                string qrCodeImageAsBase64 = qrCode.GetGraphic(20,Color.Black, Color.White, true, imgType);
-                var htmlPictureTag =  $"<img alt=\"Embedded QR Code\" src=\"data:image/{imgType.ToString().ToLower()};base64,{qrCodeImageAsBase64}\" />";
-                return htmlPictureTag;
+                using (Base64QRCode qrCode = new Base64QRCode(qrCodeData))
+                {
+                    var imgType = Base64QRCode.ImageType.Jpeg;
+                    string qrCodeImageAsBase64 = qrCode.GetGraphic(20, Color.Black, Color.White, true, imgType);
+                    var htmlPictureTag =  $"<img alt=\"Embedded QR Code\" src=\"data:image/{imgType.ToString().ToLower()};base64,{qrCodeImageAsBase64}\" />";
+                    return htmlPictureTag;
+                }
             }
         }
     }
