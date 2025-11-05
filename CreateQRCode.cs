@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
 using QRCoder;
 
@@ -16,16 +15,20 @@ namespace QRCodeFunction
         }
 
         [Function("createqrcode")]
-        public IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
+        public string Run(
+            [McpToolTrigger("createqrcode", "Generates a QR code in ASCII art format from the provided text.")]
+            ToolInvocationContext context,
+            [McpToolProperty("text", "The text which should be encoded.", isRequired: true)]
+            string text)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("MCP tool function processed a request to generate QR code.");
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
             AsciiQRCode qrCode = new AsciiQRCode(qrCodeData);
             string qrCodeAsAsciiArt = qrCode.GetGraphic(1);
 
-            return new OkObjectResult(qrCodeAsAsciiArt);
+            return qrCodeAsAsciiArt;
         }
     }
 }
