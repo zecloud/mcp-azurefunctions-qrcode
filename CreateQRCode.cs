@@ -34,7 +34,7 @@ namespace QRCodeFunction
 
         [Function("createqrcodehtml")]
         public string RunQrCodeHtml(
-            [McpToolTrigger("createqrcodehtml", "Generates a QR code in base64 jpg format from the provided text.")]
+            [McpToolTrigger("createqrcodehtml", "Generates a QR code in base64 png format from the provided text.")]
             ToolInvocationContext context,
             [McpToolProperty("text", "The text which should be encoded.", isRequired: true)]
             string text)
@@ -44,13 +44,13 @@ namespace QRCodeFunction
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-                using (Base64QRCode qrCode = new Base64QRCode(qrCodeData))
-                {
-                    var imgType = Base64QRCode.ImageType.Jpeg;
-                    string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#000000", "#FFFFFF", true, imgType);
-                    var htmlPictureTag =  $"<img alt=\"Embedded QR Code\" src=\"data:image/{imgType.ToString().ToLower()};base64,{qrCodeImageAsBase64}\" />";
-                    return htmlPictureTag;
-                }
+                // Génère des bytes PNG (compatible Linux / cross-platform, pas de System.Drawing)
+                var pngQrCode = new PngByteQRCode(qrCodeData);
+                byte[] pngBytes = pngQrCode.GetGraphic(20); // 20 = taille des pixels
+
+                string base64 = Convert.ToBase64String(pngBytes);
+                var htmlPictureTag = $"<img alt=\"Embedded QR Code\" src=\"data:image/png;base64,{base64}\" />";
+                return htmlPictureTag;
             }
         }
     }
