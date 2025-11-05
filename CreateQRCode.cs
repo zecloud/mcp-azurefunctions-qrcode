@@ -23,12 +23,13 @@ namespace QRCodeFunction
         {
             _logger.LogInformation("MCP tool function processed a request to generate QR code.");
 
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-            AsciiQRCode qrCode = new AsciiQRCode(qrCodeData);
-            string qrCodeAsAsciiArt = qrCode.GetGraphic(1);
-
-            return qrCodeAsAsciiArt;
+            using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+            {
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+                AsciiQRCode qrCode = new AsciiQRCode(qrCodeData);
+                string qrCodeAsAsciiArt = qrCode.GetGraphic(1);
+                return qrCodeAsAsciiArt;
+            }
         }
     }
 }
