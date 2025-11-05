@@ -45,7 +45,6 @@ namespace QRCodeFunction
             {
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
                 Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-                string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
                 var imgType = Base64QRCode.ImageType.Jpeg;
                 string qrCodeImageAsBase64 = qrCode.GetGraphic(20,Color.Black, Color.White, true, imgType);
                 var htmlPictureTag =  $"<img alt=\"Embedded QR Code\" src=\"data:image/{imgType.ToString().ToLower()};base64,{qrCodeImageAsBase64}\" />";
