@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "QRCodeFunction": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7189",
+      "launchBrowser": false
+    }
+  }
+}
