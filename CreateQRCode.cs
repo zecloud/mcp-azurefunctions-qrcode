@@ -43,6 +43,7 @@ namespace QRCodeFunction
 
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
             {
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
                 using (Base64QRCode qrCode = new Base64QRCode(qrCodeData))
                 {
                     var imgType = Base64QRCode.ImageType.Jpeg;
