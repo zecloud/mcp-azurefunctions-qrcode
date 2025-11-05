@@ -34,7 +34,7 @@ namespace QRCodeFunction
 
         [Function("createqrcodehtml")]
         public string RunQrCodeHtml(
-            [McpToolTrigger("createqrcodehtml", "Generates a QR code in Html format from the provided text.")]
+            [McpToolTrigger("createqrcodehtml", "Generates a QR code in HTML format from the provided text.")]
             ToolInvocationContext context,
             [McpToolProperty("text", "The text which should be encoded.", isRequired: true)]
             string text)
